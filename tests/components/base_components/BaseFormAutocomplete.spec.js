@@ -1,9 +1,6 @@
 import BaseFormAutocomplete from '@/components/base_components/BaseFormAutocomplete.vue';
 
-jest.mock('lodash/debounce', () => jest.fn((fn) => fn));
-
-// TODO: I need to figure out why I can't watch the debounced query
-describe.skip('BaseFormAutocomplete.vue', () => {
+describe('BaseFormAutocomplete.vue', () => {
   let baseFormAutocomplete;
 
   beforeEach(() => {
