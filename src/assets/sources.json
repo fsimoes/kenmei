@@ -107,6 +107,12 @@
     "logo": "asura_scans_logo.jpg"
   },
   {
+    "name": "Non-Stop Scans",
+    "url": "https://www.nonstopscans.com/",
+    "status": "Supported",
+    "logo": "non_stop_scans.jpg"
+  },
+  {
     "name": "Project Scans",
     "url": "https://ptscans.com/",
     "status": "In Development",
@@ -117,12 +123,6 @@
     "url": "https://whimsubs.xyz/",
     "status": "In Development",
     "logo": "whimsubs.jpg"
-  },
-  {
-    "name": "Non-Stop Scans",
-    "url": "https://www.nonstopscans.com/",
-    "status": "In Development",
-    "logo": "non_stop_scans.jpg"
   },
   {
     "name": "Tappytoon",
