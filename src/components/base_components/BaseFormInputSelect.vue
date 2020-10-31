@@ -4,9 +4,9 @@
       v-if="label"
       v-text="label"
     )
-    .relative
-      span.inline-block.w-full.rounded-md.shadow-sm
-        button.dropdown-button(type='button' @click='listBoxOpen = !listBoxOpen')
+    .relative(ref="baseFormSelect")
+      span.inline-block.w-full.rounded-md
+        button.dropdown-button(type='button' :name='dropdownID')
           span.block.truncate(v-if="selectedLabel" v-text="selectedLabel")
           span.block.truncate.text-gray-400(
             v-else-if="placeholder"
@@ -16,30 +16,43 @@
             icon-chevron-down.chevron.transform(
               :class="{ '-rotate-180': listBoxOpen }"
             )
-      button.fixed.inset-0.h-full.w-full.cursor-default.focus_outline-none(
-        v-if='listBoxOpen'
-        ref="clickOffButton"
-        tabindex='-1'
-        @click='listBoxOpen = false'
+      tippy-component(
+        ref="dropdownTippy"
+        trigger="click"
+        arrow="false"
+        role="dropdown"
+        animation="shift-away"
+        theme="tailwind-ui"
+        appendTo="parent"
+        placement="bottom"
+        maxWidth="100%"
+        :to='dropdownID'
+        @show="listBoxOpen = true"
+        @hide="listBoxOpen = false"
+        interactive
       )
-      transition(name="dropdown")
-        .dropdown-body(v-show='listBoxOpen')
-          ul(tabindex='-1')
-            li(
-              v-for="(item, index) in items"
-              :key="index"
-              @click="select(itemValue(item))"
+        ul(tabindex='-1')
+          li(
+            v-for="(item, index) in items"
+            :key="index"
+            @click="select(itemValue(item))"
+          )
+            span.block.truncate(
+              v-text="item.name"
+              :class="itemClasses(itemValue(item))"
             )
-              span.block.truncate(
-                v-text="item.name"
-                :class="itemClasses(itemValue(item))"
-              )
-              span.checkmark(v-if="value === itemValue(item)")
-                icon-check-solid.h-5.w-5
+            span.checkmark(v-if="value === itemValue(item)")
+              icon-check-solid.h-5.w-5
 </template>
 
 <script>
+  import uniqueId from 'lodash/uniqueId';
+  import { TippyComponent } from 'vue-tippy';
+
   export default {
+    components: {
+      TippyComponent,
+    },
     props: {
       value: {
         type: [String, Number, Object],
@@ -95,14 +108,23 @@
 
         return this.items.find((item) => item === this.value);
       },
+      dropdownTippy() {
+        return this.$refs.dropdownTippy.$el.classList.value;
+      },
+      dropdownID() {
+        return uniqueId('dropdown-');
+      },
     },
     methods: {
+      appendToComponent() {
+        return this.$refs.baseFormSelect;
+      },
       itemValue(item) {
         return this.valueKey.length ? item[this.valueKey] : item;
       },
       select(item) {
         this.$emit('input', item);
-        this.listBoxOpen = false;
+        this.$refs.dropdownTippy.tippy().hide();
       },
       selected(item) {
         return this.selectedValue === item;
@@ -118,6 +140,18 @@
 </script>
 
 <style lang="scss" scoped>
+  ::v-deep .tippy-popper {
+    min-width: -webkit-max-content;
+    min-width: -moz-max-content;
+    min-width: max-content;
+
+    @apply w-full max-w-full;
+  }
+
+  ::v-deep .tailwind-ui-theme {
+    @apply rounded-md bg-white shadow-lg p-0 text-left;
+  }
+
   ul {
     @apply max-h-60 rounded-md py-1 text-base leading-6 shadow-xs overflow-auto;
 
@@ -141,24 +175,16 @@
 
   .dropdown-button {
     @apply cursor-pointer relative w-full rounded-md border border-gray-300;
-    @apply bg-white pl-3 pr-10 py-2 text-left;
-    @apply transition ease-in-out duration-150;
+    @apply text-gray-700 bg-white px-4 py-2 text-left leading-5;
+    @apply font-medium transition ease-in-out duration-150;
 
     &:focus {
-      @apply outline-none  shadow-outline-blue  border-blue-300;
+      @apply outline-none shadow-outline-blue border-blue-300;
     }
 
     @screen sm {
       @apply text-sm leading-5;
     }
-  }
-
-  .dropdown-body {
-    // min-width: -webkit-max-content;
-    // min-width: -moz-max-content;
-    // min-width: max-content;
-    @apply absolute origin-top-right mt-2 w-full rounded-md bg-white shadow-lg;
-    @apply z-20;
   }
 
   .checkmark {
@@ -171,24 +197,5 @@
 
   .chevron-wrapper {
     @apply absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none;
-  }
-
-  // Dropdown transition
-  .dropdown-enter-active {
-    @apply ease-out duration-100;
-  }
-
-  .dropdown-leave-active {
-    @apply ease-in duration-75;
-  }
-
-  .dropdown-enter,
-  .dropdown-leave-to {
-    @apply transform opacity-0 scale-95;
-  }
-
-  .dropdown-enter-to,
-  .dropdown-leave {
-    @apply transform opacity-100 scale-100;
   }
 </style>
