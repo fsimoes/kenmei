@@ -11,7 +11,6 @@ import * as resource from '@/services/endpoints/v1/manga_series';
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
-jest.mock('lodash/debounce', () => jest.fn((fn) => fn));
 
 describe('AddMangaEntryBySearch.vue', () => {
   let store;

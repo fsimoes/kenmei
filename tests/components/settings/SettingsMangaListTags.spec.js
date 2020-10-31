@@ -10,7 +10,6 @@ const localVue = createLocalVue();
 
 // To avoid missing directive Vue warnings
 localVue.directive('loading', true);
-jest.mock('lodash/debounce', () => jest.fn((fn) => fn));
 
 describe('SettingsMangaListTags.vue', () => {
   afterEach(() => { jest.restoreAllMocks(); });

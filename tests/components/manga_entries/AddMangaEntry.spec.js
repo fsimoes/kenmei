@@ -11,8 +11,6 @@ const localVue = createLocalVue();
 
 localVue.use(Vuex);
 
-jest.mock('lodash/debounce', () => jest.fn((fn) => fn));
-
 describe('AddMangaEntry.vue', () => {
   let store;
   let addMangaEntry;
