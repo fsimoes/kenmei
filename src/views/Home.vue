@@ -36,10 +36,11 @@
       return {
         landing: false,
         updateBanner: {
-          id: 9,
-          link: 'https://news.kenmei.co/monthly-updates/2020/september',
+          id: 10,
+          link: 'https://news.kenmei.co/monthly-updates/2020/october',
           message: `
-            Upcoming desktop and mobile UI overhaul + more in the latest update
+            Improvements to the series search, various back-end improvements
+            and more in the latest update
           `,
           mobileText: 'Check out the latest monthly update',
         },
